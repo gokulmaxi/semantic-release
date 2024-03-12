@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "semantic-release",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/gokulmaxi/semantic-release.git",
