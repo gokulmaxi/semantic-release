@@ -1,0 +1,35 @@
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile
+      - name: Yarn Audit
+        run: |
+          yarn audit --level high | tee yarn-audit.txt
+          exit $(grep -c "^Severity:.*High$" yarn-audit.txt)
+      - run: yarn run test
+      - name: Create Release Version
+        run: yarn semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_TOKEN }}
+      - run: yarn run build
+      - name: Upload Lambda Package
+        uses: actions/upload-artifact@v3
+        with:
+          name: lambda-package
+          path: dist/**/*.zip
+      - name: Upload Synthetics Package
+        uses: actions/upload-artifact@v3
+        with:
+          name: synthetics-package
+          path: synthetics/**
