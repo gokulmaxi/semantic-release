@@ -4,5 +4,8 @@
   "main": "index.js",
   "repository": "https://github.com/gokulmaxi/semantic-release.git",
   "author": "gokulmaxi <gokulakams@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "semantic-release": "^23.0.2"
+  }
 }
